@@ -44,7 +44,7 @@ md"""## The simplest possible case
 
 To familiarise ourselves with growth models, let's look at a very simple model, while ignoring the fact that the model does not make sense when modelling biological populations.
 
- $$(2)\frac{dP}{dt} = r$$
+$$(2)\frac{dP}{dt} = r$$
 
 Here, our growth rate $\frac{dP}{dt}$  is constant and equal to a growth rate constant $r$.
 
@@ -97,7 +97,7 @@ $$(8) P(t) = rt + P_0$$
 # ╔═╡ ad08de50-913d-11eb-3f87-fb27a282bdb3
 md"""### Interactive Simulation
 *Change the sliders to adjust the corresponding values*:
-- growth rate constant ($r$) $(@bind r_0 Slider(-0.25:0.01:0.25, default=0.01, show_value=true))
+- growth rate constant ($r$) $(@bind r_0 Slider(-0.5:0.01:0.5, default=0.01, show_value=true))
 - initial population size($P_0$) $(@bind P0_0 Slider(0:5:100, default=20, show_value=true))
 """
 
@@ -238,7 +238,7 @@ md"""
 *Change the sliders to adjust the corresponding values*:
 - growth rate constant ($r$) $(@bind r_2 Slider(0:0.001:0.25, default=0.01, show_value=true))
 - carrying capacity ($K$) $(@bind K_2 Slider(1:5:80, default=30, show_value=true))
-- initial population size($P_0$) $(@bind P0_2 Slider(0:5:100, default=20, show_value=true))
+- initial population size($P_0$) $(@bind P0_2 Slider(1:5:100, default=20, show_value=true))
 """
 
 # ╔═╡ 5fbb5af8-9148-11eb-0ade-b3fd39af29c1
@@ -267,7 +267,8 @@ begin
 		plot!(rateplot_2, [K_2 for p in -2:3] , -2:3,
 				color = "darkgrey",
 				linestyle = :dash,
-				label = "P=K")
+				label = "";
+				annotatios = (K_2, 1, "P=K"))
 		plot!(rateplot_2, population_2, [r_2 * p for p in population_2],
 				color = "grey",
 				linestyle = :dot,
@@ -284,7 +285,8 @@ begin
 		plot!(simplot_2, time_2 , [K_2 for t in time_2],
 				color = "darkgrey",
 				linestyle = :dash,
-				label = "P=K")
+				label = "",
+				annotatios = ([40], [K_2], "P=K"))
 	plot(rateplot_2, simplot_2, layout = (1, 2),fontfamily="Computer Modern")
 end
 
@@ -388,7 +390,7 @@ And that is that. Solving differential equations this way is possible for some, 
 """
 
 # ╔═╡ Cell order:
-# ╟─89fcfe1c-913a-11eb-1b04-0d87fd8dbcbe
+# ╠═89fcfe1c-913a-11eb-1b04-0d87fd8dbcbe
 # ╟─9f7c1628-9139-11eb-0d69-f910a995eca7
 # ╟─babc9748-9139-11eb-0da1-0d942d591481
 # ╟─ee2bb580-9145-11eb-2bc2-dbd9aae68be9
@@ -399,7 +401,7 @@ And that is that. Solving differential equations this way is possible for some, 
 # ╟─008851e2-9147-11eb-3b1c-0ff07fd4e84f
 # ╟─20245898-9147-11eb-16cb-7320a2ffbe0d
 # ╟─24f0552e-9148-11eb-1226-c326de038a70
-# ╟─3d7b3688-9148-11eb-3224-9b832c4692d9
-# ╟─5fbb5af8-9148-11eb-0ade-b3fd39af29c1
+# ╠═3d7b3688-9148-11eb-3224-9b832c4692d9
+# ╠═5fbb5af8-9148-11eb-0ade-b3fd39af29c1
 # ╟─64b31f38-9149-11eb-11a0-718a61330e76
 # ╟─6f8ed9ce-9149-11eb-2c08-1b1e1f3e3f5c
