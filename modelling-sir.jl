@@ -111,6 +111,8 @@ md""" ## Simulation
 md"""
 Base reprodution rate = $(round((r*(1-I0-R0)/a), sigdigits = 3)), 
 Infectious period = $(round(1/a, sigdigits = 3))
+
+Scaled for Austria (9M): I(0): $(I0 * 9000000), R(0): $(R0 * 9000000)
 """
 
 # ╔═╡ a5f6c71c-920a-11eb-09e9-098f52c01f11
@@ -141,22 +143,151 @@ prob = ODEProblem(sir!,u0,tspan,p)
 
 # ╔═╡ 4c7f9b82-91f1-11eb-0064-e70bb182dae0
 begin
-	sol = solve(prob)
+	sol = solve(prob, dt=1.0, dense = true)
 	
-	simplot = plot(sol, label = ["S(t)" "I(t)" "R(t)"], xlabel = "t / days", title = "Timecourse", xlims = (0, tmax), ylims = (0, ymax))
+	simplot = plot(sol.t, [sol[3,:] + sol[2,:] + sol[1,:] sol[3,:] + sol[2,:] sol[2,:]], fill = true, color = ["gray89" "paleturquoise3" "lightcoral"], fillalpha = 0.4, label = ["S(t)" "R(t)" "I(t)"], xlabel = "t / days", title = "Timecourse", xlims = (0, tmax), ylims = (0, ymax))
 	
-	phaseplot1 = plot(sol, vars = (1,2), xlabel = "S(t)", ylabel = "I(t)", label = "", title = "Phaseplanes", xlims = (0,ymax), ylims = (0,ymax))
+	phaseplot1 = plot(sol, vars = (1,2), xlabel = "S(t)", ylabel = "I(t)", label = "", title = "Phaseplanes", xlims = (0,ymax), ylims = (0,ymax), color = "skyblue4")
 	
-	phaseplot2 = plot(sol, vars = (3,2), xlabel = "R(t)", ylabel = "I(t)", label = "", xlims = (0,ymax), ylims = (0,ymax))
+	phaseplot2 = plot(sol, vars = (3,2), xlabel = "R(t)", ylabel = "I(t)", label = "", xlims = (0,ymax), ylims = (0,ymax), color = "skyblue4")
 	
 	phaseplot = plot(phaseplot1, phaseplot2, layout = (2,1))
 	
 	plot(simplot, phaseplot, layout = (1, 2),fontfamily="Computer Modern")
 end
 
+# ╔═╡ af81cf0a-9220-11eb-3ba9-e17dc6c8e46a
+md"""
+## Attempting a more realistic model
+
+Next, we'll try to make the model more realistic by including **reinfection**, **vaccination** and **mortalitiy**.
+
+##### Mortality
+We'll only consider deaths of infected people at a mortality rate $m$: $$I \xrightarrow{m} D$$
+
+##### Vaccination & Reinfection
+To account for vaccination, we'll assume that
+1. The rate of infection is different for vaccinated people $V$ and susceptible people $S$, represented by a *vaccination immunity factor*, $i_v < 1$
+
+$$S \xrightarrow{r_s} I \xleftarrow{r_s \cdot i_v} V$$
+
+2. Likewise, susceptible people $S$ and recovered people $R$ become infected at different rates, represented by an *recovered immunity factor*, $i_r < 1$ that lowers the infection risk
+
+$$S \xrightarrow{r_s} I \xleftarrow{r_s \cdot i_r} R$$
+
+3. We assume that recovered people $R$ and susceptible people $S$ are vaccinated at the same rate $v$ 
+
+$$S \xrightarrow{v} V \xleftarrow{v} R$$
+
+Taken together, this yields the following set of differential equations:
+
+$$\begin{align}
+	\frac{dS}{dt} = -rSI -vS\\
+	\frac{dV}{dt} = vS + vR - i_v r VI\\
+	\frac{dD}{dt} = mI\\
+	\frac{dR}{dt} = aI - i_r rRI - vR\\
+	\frac{dI}{dt} = rSI + i_r rRI + i_v r VI - mI - aI
+\end{align}$$
+
+"""
+
+# ╔═╡ d0cc506c-9226-11eb-295c-39c46ae3c52d
+md""" ## Simulation
+*Change the sliders to adjust the corresponding values*:
+- transmission rate $r$ $(@bind r2 Slider(0:0.005:1, default=0.125, show_value=true))
+- recovery rate $a$ $(@bind a2 Slider(0:0.001:0.25, default=0.1, show_value=true))
+- rate of vaccination $v$ $(@bind v2 Slider(0:0.0001:0.01, default=0.002, show_value=true))
+- mortality $m$ $(@bind m2 Slider(0:0.001:0.25, default=0.002, show_value=true))
+- % immunity recovered $i_r$ $(@bind ir Slider(0:1.0:100.0, default=90, show_value=true))
+- % immunity vaccinated $i_v$ $(@bind iv Slider(0:1.0:100.0, default=90, show_value=true))
+- initial number of infected $I(0)$ $(@bind I02 Slider(0.0001:0.001:0.1, default=0.004, show_value=true))
+- initial number of resistant $R(0)$ $(@bind R02 Slider(0:0.001:0.1, default=0,show_value=true))
+- initial number of vaccinated $V(0)$ $(@bind V02 Slider(0:0.001:0.1, default=0,show_value=true))
+- initial number of dead $D(0)$ $(@bind D02 Slider(0:0.001:0.1, default=0,show_value=true))
+- timespan $t_{max}$ $(@bind tmax2 Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days
+- zoom y-axis $(@bind ymax2 Slider(0.05:0.05:1.0, default=1.0,show_value=true))
+"""
+
+# ╔═╡ a0785246-9227-11eb-2042-57285abc9b8d
+md"""
+Base reprodution rate = $(round((r2*(1-I02-R02-V02-D02)/a2), sigdigits = 3)), 
+Infectious period = $(round(1/a2, sigdigits = 3))
+"""
+
+# ╔═╡ 186376c0-922f-11eb-2dde-8b4c16086b66
+md"""
+Population size = $(@bind popsize NumberField(500000:10000000000, default=9000000))
+"""
+
+# ╔═╡ 1b563284-9230-11eb-0e2a-378bf00144ef
+function getres(solution, i, t, p)
+	return round(solution(t)[i]*p)
+end
+
+# ╔═╡ c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
+#S, I, R, V, D
+function sirvd!(du,u,p,t)
+	du[1] = -u[1] * ( p[1] * u[2] + p[3])
+	du[2] = u[2] * (p[1] * (u[1] + p[5] * u[4] + p[4] * u[3]) - p[6] - p[2])
+	du[3] = p[2] * u[2] - u[3] * ( p[1] * p[4] *  u[2] + p[3])
+	du[4] = p[3] * (u[1] + u[3]) - u[4] * u[2] * p[1] * p[5]
+	du[5] = p[6] * u[2]
+end
+
+# ╔═╡ d1542720-9227-11eb-18a9-357d60270d93
+p2 = [r2, a2, v2, (100 - ir)/100, (100 - iv)/100, m2]
+
+# ╔═╡ d80c9de0-9227-11eb-28be-bf26f5194979
+u02 = [1-I02-R02-V02-D02, I02, R02, V02, D02]
+
+# ╔═╡ e32e0902-9227-11eb-0885-1199f01da570
+tspan2 = (0.0, 2000)
+
+# ╔═╡ e9840412-9227-11eb-0cbb-91d4b823cb40
+prob2 = ODEProblem(sirvd!,u02,tspan2,p2)
+
+# ╔═╡ c3ed3914-9227-11eb-0454-913918c3e700
+begin
+	sol2 = solve(prob2, dt=1.0, dense = true)
+	infected = sol2[2,:]
+	dead = infected + sol2[5,:]
+	recovered = dead + sol2[3,:]
+	vaccinated = recovered + sol2[4,:]
+	susceptible = vaccinated + sol2[1,:]
+	
+	
+	simplot21 = plot(sol2.t, [susceptible, vaccinated, recovered, dead, infected], 
+				fill = true, 
+				color = ["gray89" "skyblue3" "paleturquoise3" "gray39" "lightcoral"], 
+				fillalpha = 0.4, 
+				label = ["S(t)" "V(t)" "R(t)" "D(t)" "I(t)"], 
+				xlabel = "t / days", 
+				title = "Timecourse (area)", 
+				xlims = (0, tmax2), 
+				ylims = (0, ymax2))
+	
+	simplot22 = plot(sol2,
+				color = ["gray89" "lightcoral" "paleturquoise3" "skyblue3" "gray39"], 
+				fillalpha = 0.4, label = ["S(t)" "I(t)" "R(t)" "V(t)" "D(t)"], 
+				xlabel = "t / days", 
+				title = "Timecourse (area)", 
+				xlims = (0, tmax2), 
+				ylims = (0, ymax2))
+	
+	plot(simplot21, simplot22, layout = (1, 2),fontfamily="Computer Modern")
+end
+
+# ╔═╡ fccfb44a-922d-11eb-05d8-9b378316a417
+md"""
+| t (days) | I(t)                               | R(t)                               | V(t)                               | D(t)                               |
+|----------|------------------------------------|------------------------------------|------------------------------------|------------------------------------|
+| 0        | $(getres(sol2, 2, 0, popsize))     | $(getres(sol2, 3, 0, popsize))     | $(getres(sol2, 4, 0, popsize))     | $(getres(sol2, 5, 0, popsize))     |
+| $tmax2   | $(getres(sol2, 2, tmax2, popsize)) | $(getres(sol2, 3, tmax2, popsize)) | $(getres(sol2, 4, tmax2, popsize)) | $(getres(sol2, 5, tmax2, popsize)) |
+"""
+
 # ╔═╡ Cell order:
 # ╟─7cd44a22-91f0-11eb-056d-699740ca7da9
-# ╟─3199bb4e-91ed-11eb-37fa-abed99588e6b
+# ╠═3199bb4e-91ed-11eb-37fa-abed99588e6b
 # ╟─1fc5f952-91ff-11eb-3366-9f477c640915
 # ╟─bfe81088-9203-11eb-162b-f373131bc105
 # ╟─e574a398-9203-11eb-0006-c38430911ee1
@@ -169,3 +300,15 @@ end
 # ╟─a6c393c8-91f1-11eb-0be0-99d47c2b207f
 # ╟─eccbab9e-91f1-11eb-19b2-d733609880d0
 # ╟─f2abe15a-91f1-11eb-17c2-e99b8b67502f
+# ╟─af81cf0a-9220-11eb-3ba9-e17dc6c8e46a
+# ╟─d0cc506c-9226-11eb-295c-39c46ae3c52d
+# ╟─a0785246-9227-11eb-2042-57285abc9b8d
+# ╟─c3ed3914-9227-11eb-0454-913918c3e700
+# ╟─fccfb44a-922d-11eb-05d8-9b378316a417
+# ╟─186376c0-922f-11eb-2dde-8b4c16086b66
+# ╠═1b563284-9230-11eb-0e2a-378bf00144ef
+# ╠═c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
+# ╟─d1542720-9227-11eb-18a9-357d60270d93
+# ╟─d80c9de0-9227-11eb-28be-bf26f5194979
+# ╟─e32e0902-9227-11eb-0885-1199f01da570
+# ╟─e9840412-9227-11eb-0cbb-91d4b823cb40
