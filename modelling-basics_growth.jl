@@ -402,6 +402,6 @@ And that is that. Solving differential equations this way is possible for some, 
 # ╟─20245898-9147-11eb-16cb-7320a2ffbe0d
 # ╟─24f0552e-9148-11eb-1226-c326de038a70
 # ╟─3d7b3688-9148-11eb-3224-9b832c4692d9
-# ╠═5fbb5af8-9148-11eb-0ade-b3fd39af29c1
+# ╟─5fbb5af8-9148-11eb-0ade-b3fd39af29c1
 # ╟─64b31f38-9149-11eb-11a0-718a61330e76
 # ╟─6f8ed9ce-9149-11eb-2c08-1b1e1f3e3f5c
