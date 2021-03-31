@@ -194,27 +194,23 @@ $$\begin{align}
 # ╔═╡ d0cc506c-9226-11eb-295c-39c46ae3c52d
 md""" ## Simulation
 *Change the sliders to adjust the corresponding values*:
-- transmission rate $r$ $(@bind r2 Slider(0:0.005:1, default=0.125, show_value=true))
-- recovery rate $a$ $(@bind a2 Slider(0:0.001:0.25, default=0.1, show_value=true))
-- rate of vaccination $v$ $(@bind v2 Slider(0:0.0001:0.01, default=0.002, show_value=true))
-- mortality $m$ $(@bind m2 Slider(0:0.001:0.25, default=0.002, show_value=true))
-- % immunity recovered $i_r$ $(@bind ir Slider(0:1.0:100.0, default=90, show_value=true))
-- % immunity vaccinated $i_v$ $(@bind iv Slider(0:1.0:100.0, default=90, show_value=true))
-- initial number of infected $I(0)$ $(@bind I02 Slider(0.0001:0.001:0.1, default=0.004, show_value=true))
-- initial number of recovered $R(0)$ $(@bind R02 Slider(0:0.001:0.1, default=0.055,show_value=true))
-- initial number of vaccinated $V(0)$ $(@bind V02 Slider(0:0.001:0.1, default=0.048,show_value=true))
-- initial number of dead $D(0)$ $(@bind D02 Slider(0:0.001:0.1, default=0.001,show_value=true))
-- timespan $t_{max}$ $(@bind tmax2 Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days
-- zoom y-axis $(@bind ymax2 Slider(0.05:0.05:1.0, default=1.0,show_value=true))
-"""
 
-# ╔═╡ 186376c0-922f-11eb-2dde-8b4c16086b66
-md"""
-Population size = $(@bind popsize NumberField(500000:10000000000, default=9044650))
+| parameter                   | value                     |
+|-----------------------------|---------------------------|
+| transmission rate $r$       | $(@bind r2 Slider(0:0.005:1, default=0.125, show_value=true)) |
+| recovery rate $a$           | $(@bind a2 Slider(0:0.001:0.25, default=0.1, show_value=true))|
+| rate of vaccination $v$     | $(@bind v2 Slider(0:0.0001:0.01, default=0.0008, show_value=true)) |
+| mortality $m$               | $(@bind m2 Slider(0:0.0001:0.05, default=0.0006, show_value=true)) |
+| % immunity recovered        | $(@bind ir Slider(0:1.0:100.0, default=60, show_value=true)) |
+| % immunity vaccinated       | $(@bind iv Slider(0:1.0:100.0, default=90, show_value=true)) |
+|  $I(0)$                     | $(@bind I02 Slider(0.0001:0.001:0.1, default=0.004, show_value=true)) |
+|  $R(0)$                     | $(@bind R02 Slider(0:0.001:0.1, default=0.055,show_value=true)) |
+| $V(0)$                      | $(@bind V02 Slider(0:0.001:0.1, default=0.048,show_value=true)) |
+| $D(0)$                      | $(@bind D02 Slider(0:0.001:0.1, default=0.001,show_value=true)) |
+| timespan $t_{max}$          | $(@bind tmax2 Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days | 
+| zoom y-axis                 | $(@bind ymax2 Slider(0.01:0.05:1.0, default=1.0,show_value=true)) |
+| Population size             | $(@bind popsize NumberField(500000:10000000000, default=9044650)) |
 """
-
-# ╔═╡ 4684bde2-9233-11eb-231b-b3bdab1180b0
-501116/popsize
 
 # ╔═╡ 1b563284-9230-11eb-0e2a-378bf00144ef
 function getres(solution, i, t, p)
@@ -257,10 +253,10 @@ begin
 	simplot21 = plot(sol2.t, [susceptible, vaccinated, recovered, dead, infected], 
 				fill = true, 
 				color = ["gray89" "skyblue3" "paleturquoise3" "gray39" "lightcoral"], 
-				fillalpha = 0.4, 
+				fillalpha = 1, 
 				label = ["S(t)" "V(t)" "R(t)" "D(t)" "I(t)"], 
 				xlabel = "t / days", 
-				title = "Timecourse (area)", 
+				title = "Timecourse (stacked area)", 
 				xlims = (0, tmax2), 
 				ylims = (0, ymax2))
 	
@@ -268,7 +264,7 @@ begin
 				color = ["gray89" "lightcoral" "paleturquoise3" "skyblue3" "gray39"], 
 				fillalpha = 0.4, label = ["S(t)" "I(t)" "R(t)" "V(t)" "D(t)"], 
 				xlabel = "t / days", 
-				title = "Timecourse (area)", 
+				title = "Timecourse", 
 				xlims = (0, tmax2), 
 				ylims = (0, ymax2))
 	
@@ -295,7 +291,7 @@ Infectious period = $(round(1/a2, sigdigits = 3))
 # ╟─e574a398-9203-11eb-0006-c38430911ee1
 # ╟─ac0c0230-91f0-11eb-057d-2103908afe51
 # ╟─0b66bc58-91fa-11eb-24f1-7f9f839a6cbf
-# ╟─4c7f9b82-91f1-11eb-0064-e70bb182dae0
+# ╠═4c7f9b82-91f1-11eb-0064-e70bb182dae0
 # ╟─a5f6c71c-920a-11eb-09e9-098f52c01f11
 # ╟─618d69dc-91f1-11eb-211f-d7548bf4a306
 # ╟─9a4c2f80-91f1-11eb-2b14-1784007ca92c
@@ -304,10 +300,8 @@ Infectious period = $(round(1/a2, sigdigits = 3))
 # ╟─f2abe15a-91f1-11eb-17c2-e99b8b67502f
 # ╟─af81cf0a-9220-11eb-3ba9-e17dc6c8e46a
 # ╟─d0cc506c-9226-11eb-295c-39c46ae3c52d
-# ╟─186376c0-922f-11eb-2dde-8b4c16086b66
 # ╟─fccfb44a-922d-11eb-05d8-9b378316a417
 # ╟─c3ed3914-9227-11eb-0454-913918c3e700
-# ╠═4684bde2-9233-11eb-231b-b3bdab1180b0
 # ╟─1b563284-9230-11eb-0e2a-378bf00144ef
 # ╟─c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
 # ╟─d1542720-9227-11eb-18a9-357d60270d93
