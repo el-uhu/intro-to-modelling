@@ -113,13 +113,11 @@ Base reprodution rate = $(round((r*(1-I0-R0)/a), sigdigits = 3)),
 Infectious period = $(round(1/a, sigdigits = 3))
 """
 
-# ╔═╡ 31c28dae-9205-11eb-1bb2-a31c34291bf3
+# ╔═╡ a5f6c71c-920a-11eb-09e9-098f52c01f11
 md"""
+!!! danger "Beware!"
 
-!!! danger "Beware!" 
-	
-	The blocks below are used to specify the model. Feel free to play around with them, but proceed with care!
-
+    The blocks below are used to specify the model. Feel free to play around with them, but proceed with care!
 """
 
 # ╔═╡ 618d69dc-91f1-11eb-211f-d7548bf4a306
@@ -165,7 +163,7 @@ end
 # ╟─ac0c0230-91f0-11eb-057d-2103908afe51
 # ╟─0b66bc58-91fa-11eb-24f1-7f9f839a6cbf
 # ╟─4c7f9b82-91f1-11eb-0064-e70bb182dae0
-# ╟─31c28dae-9205-11eb-1bb2-a31c34291bf3
+# ╟─a5f6c71c-920a-11eb-09e9-098f52c01f11
 # ╟─618d69dc-91f1-11eb-211f-d7548bf4a306
 # ╟─9a4c2f80-91f1-11eb-2b14-1784007ca92c
 # ╟─a6c393c8-91f1-11eb-0be0-99d47c2b207f
