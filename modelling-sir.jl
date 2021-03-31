@@ -201,27 +201,25 @@ md""" ## Simulation
 - % immunity recovered $i_r$ $(@bind ir Slider(0:1.0:100.0, default=90, show_value=true))
 - % immunity vaccinated $i_v$ $(@bind iv Slider(0:1.0:100.0, default=90, show_value=true))
 - initial number of infected $I(0)$ $(@bind I02 Slider(0.0001:0.001:0.1, default=0.004, show_value=true))
-- initial number of resistant $R(0)$ $(@bind R02 Slider(0:0.001:0.1, default=0,show_value=true))
-- initial number of vaccinated $V(0)$ $(@bind V02 Slider(0:0.001:0.1, default=0,show_value=true))
-- initial number of dead $D(0)$ $(@bind D02 Slider(0:0.001:0.1, default=0,show_value=true))
+- initial number of recovered $R(0)$ $(@bind R02 Slider(0:0.001:0.1, default=0.055,show_value=true))
+- initial number of vaccinated $V(0)$ $(@bind V02 Slider(0:0.001:0.1, default=0.048,show_value=true))
+- initial number of dead $D(0)$ $(@bind D02 Slider(0:0.001:0.1, default=0.001,show_value=true))
 - timespan $t_{max}$ $(@bind tmax2 Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days
 - zoom y-axis $(@bind ymax2 Slider(0.05:0.05:1.0, default=1.0,show_value=true))
 """
 
-# ╔═╡ a0785246-9227-11eb-2042-57285abc9b8d
-md"""
-Base reprodution rate = $(round((r2*(1-I02-R02-V02-D02)/a2), sigdigits = 3)), 
-Infectious period = $(round(1/a2, sigdigits = 3))
-"""
-
 # ╔═╡ 186376c0-922f-11eb-2dde-8b4c16086b66
 md"""
-Population size = $(@bind popsize NumberField(500000:10000000000, default=9000000))
+Population size = $(@bind popsize NumberField(500000:10000000000, default=9044650))
 """
+
+# ╔═╡ 4684bde2-9233-11eb-231b-b3bdab1180b0
+501116/popsize
 
 # ╔═╡ 1b563284-9230-11eb-0e2a-378bf00144ef
 function getres(solution, i, t, p)
-	return round(solution(t)[i]*p)
+	v = solution(t)[i]*p
+	return round(maximum([0.0 v]))
 end
 
 # ╔═╡ c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
@@ -283,6 +281,10 @@ md"""
 |----------|------------------------------------|------------------------------------|------------------------------------|------------------------------------|
 | 0        | $(getres(sol2, 2, 0, popsize))     | $(getres(sol2, 3, 0, popsize))     | $(getres(sol2, 4, 0, popsize))     | $(getres(sol2, 5, 0, popsize))     |
 | $tmax2   | $(getres(sol2, 2, tmax2, popsize)) | $(getres(sol2, 3, tmax2, popsize)) | $(getres(sol2, 4, tmax2, popsize)) | $(getres(sol2, 5, tmax2, popsize)) |
+
+Base reprodution rate = $(round((r2*(1-I02-R02-V02-D02)/a2), sigdigits = 3)), 
+Infectious period = $(round(1/a2, sigdigits = 3))
+
 """
 
 # ╔═╡ Cell order:
@@ -302,12 +304,12 @@ md"""
 # ╟─f2abe15a-91f1-11eb-17c2-e99b8b67502f
 # ╟─af81cf0a-9220-11eb-3ba9-e17dc6c8e46a
 # ╟─d0cc506c-9226-11eb-295c-39c46ae3c52d
-# ╟─a0785246-9227-11eb-2042-57285abc9b8d
-# ╟─c3ed3914-9227-11eb-0454-913918c3e700
-# ╟─fccfb44a-922d-11eb-05d8-9b378316a417
 # ╟─186376c0-922f-11eb-2dde-8b4c16086b66
-# ╠═1b563284-9230-11eb-0e2a-378bf00144ef
-# ╠═c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
+# ╟─fccfb44a-922d-11eb-05d8-9b378316a417
+# ╟─c3ed3914-9227-11eb-0454-913918c3e700
+# ╠═4684bde2-9233-11eb-231b-b3bdab1180b0
+# ╟─1b563284-9230-11eb-0e2a-378bf00144ef
+# ╟─c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
 # ╟─d1542720-9227-11eb-18a9-357d60270d93
 # ╟─d80c9de0-9227-11eb-28be-bf26f5194979
 # ╟─e32e0902-9227-11eb-0885-1199f01da570
