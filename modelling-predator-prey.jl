@@ -83,19 +83,19 @@ begin
 	# u[1] = N, u[2] = P
 
 	sol = solve(prob)
-	plot(sol)
+	simplot = plot(sol)
 end
 
 # ╔═╡ 382308d4-916e-11eb-3246-9fbd7b53a7ec
 
 
 # ╔═╡ Cell order:
-# ╠═0e592c68-9167-11eb-30fd-efdb809f47f7
+# ╟─0e592c68-9167-11eb-30fd-efdb809f47f7
 # ╟─e81c951c-9166-11eb-1dd3-51fe9fcb57db
 # ╟─f1a68086-9169-11eb-2721-652c6732d36f
 # ╟─6c09dc9c-916a-11eb-1bff-fb5495955ad7
-# ╟─0f573286-916e-11eb-157e-1d0139bd363c
-# ╟─2400191e-916e-11eb-2d01-3b3a48757ff4
+# ╠═0f573286-916e-11eb-157e-1d0139bd363c
+# ╠═2400191e-916e-11eb-2d01-3b3a48757ff4
 # ╟─2c79a5ea-916e-11eb-1abb-7933f2a1eae1
 # ╟─2c7a590c-916e-11eb-227b-97d8098a22b3
 # ╟─33519b3e-916e-11eb-1cb5-7fbc17fba1d8

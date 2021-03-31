@@ -390,7 +390,7 @@ And that is that. Solving differential equations this way is possible for some, 
 """
 
 # ╔═╡ Cell order:
-# ╠═89fcfe1c-913a-11eb-1b04-0d87fd8dbcbe
+# ╟─89fcfe1c-913a-11eb-1b04-0d87fd8dbcbe
 # ╟─9f7c1628-9139-11eb-0d69-f910a995eca7
 # ╟─babc9748-9139-11eb-0da1-0d942d591481
 # ╟─ee2bb580-9145-11eb-2bc2-dbd9aae68be9
@@ -401,7 +401,7 @@ And that is that. Solving differential equations this way is possible for some, 
 # ╟─008851e2-9147-11eb-3b1c-0ff07fd4e84f
 # ╟─20245898-9147-11eb-16cb-7320a2ffbe0d
 # ╟─24f0552e-9148-11eb-1226-c326de038a70
-# ╠═3d7b3688-9148-11eb-3224-9b832c4692d9
+# ╟─3d7b3688-9148-11eb-3224-9b832c4692d9
 # ╠═5fbb5af8-9148-11eb-0ade-b3fd39af29c1
 # ╟─64b31f38-9149-11eb-11a0-718a61330e76
 # ╟─6f8ed9ce-9149-11eb-2c08-1b1e1f3e3f5c
