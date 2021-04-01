@@ -156,155 +156,18 @@ begin
 	plot(simplot, phaseplot, layout = (1, 2),fontfamily="Computer Modern")
 end
 
-# ╔═╡ af81cf0a-9220-11eb-3ba9-e17dc6c8e46a
-md"""
-## Attempting a more realistic model
-
-Next, we'll try to make the model more realistic by including **reinfection**, **vaccination** and **mortalitiy**.
-
-##### Mortality
-We'll only consider deaths of infected people at a mortality rate $m$: $$I \xrightarrow{m} D$$
-
-##### Vaccination & Reinfection
-To account for vaccination, we'll assume that
-1. The rate of infection is different for vaccinated people $V$ and susceptible people $S$, represented by a *vaccination immunity factor*, $i_v < 1$
-
-$$S \xrightarrow{r_s} I \xleftarrow{r_s \cdot i_v} V$$
-
-2. Likewise, susceptible people $S$ and recovered people $R$ become infected at different rates, represented by an *recovered immunity factor*, $i_r < 1$ that lowers the infection risk
-
-$$S \xrightarrow{r_s} I \xleftarrow{r_s \cdot i_r} R$$
-
-3. We assume that recovered people $R$ and susceptible people $S$ are vaccinated at the same rate $v$ 
-
-$$S \xrightarrow{v} V \xleftarrow{v} R$$
-
-Taken together, this yields the following set of differential equations:
-
-$$\begin{align}
-	\frac{dS}{dt} = -rSI -vS\\
-	\frac{dV}{dt} = vS + vR - i_v r VI\\
-	\frac{dD}{dt} = mI\\
-	\frac{dR}{dt} = aI - i_r rRI - vR\\
-	\frac{dI}{dt} = rSI + i_r rRI + i_v r VI - mI - aI
-\end{align}$$
-
-"""
-
-# ╔═╡ d0cc506c-9226-11eb-295c-39c46ae3c52d
-md""" ## Simulation
-*Change the sliders to adjust the corresponding values*:
-
-| parameter                   | value                     |
-|-----------------------------|---------------------------|
-| transmission rate $r$       | $(@bind r2 Slider(0:0.005:1, default=0.125, show_value=true)) |
-| recovery rate $a$           | $(@bind a2 Slider(0:0.001:0.25, default=0.1, show_value=true))|
-| rate of vaccination $v$     | $(@bind v2 Slider(0:0.0001:0.01, default=0.0008, show_value=true)) |
-| mortality $m$               | $(@bind m2 Slider(0:0.0001:0.05, default=0.0006, show_value=true)) |
-| % immunity recovered        | $(@bind ir Slider(0:1.0:100.0, default=60, show_value=true)) |
-| % immunity vaccinated       | $(@bind iv Slider(0:1.0:100.0, default=90, show_value=true)) |
-|  $I(0)$                     | $(@bind I02 Slider(0.0001:0.001:0.1, default=0.004, show_value=true)) |
-|  $R(0)$                     | $(@bind R02 Slider(0:0.001:0.1, default=0.055,show_value=true)) |
-| $V(0)$                      | $(@bind V02 Slider(0:0.001:0.1, default=0.048,show_value=true)) |
-| $D(0)$                      | $(@bind D02 Slider(0:0.001:0.1, default=0.001,show_value=true)) |
-| timespan $t_{max}$          | $(@bind tmax2 Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days | 
-| zoom y-axis                 | $(@bind ymax2 Slider(0.01:0.05:1.0, default=1.0,show_value=true)) |
-| Population size             | $(@bind popsize NumberField(500000:10000000000, default=9044650)) |
-"""
-
-# ╔═╡ 1b563284-9230-11eb-0e2a-378bf00144ef
-function getres(solution, i, t, p)
-	v = solution(t)[i]*p
-	return round(maximum([0.0 v]))
-end
-
-# ╔═╡ c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
-#S, I, R, V, D
-function sirvd!(du,u,p,t)
-	du[1] = -u[1] * ( p[1] * u[2] + p[3])
-	du[2] = u[2] * (p[1] * (u[1] + p[5] * u[4] + p[4] * u[3]) - p[6] - p[2])
-	du[3] = p[2] * u[2] - u[3] * ( p[1] * p[4] *  u[2] + p[3])
-	du[4] = p[3] * (u[1] + u[3]) - u[4] * u[2] * p[1] * p[5]
-	du[5] = p[6] * u[2]
-end
-
-# ╔═╡ d1542720-9227-11eb-18a9-357d60270d93
-p2 = [r2, a2, v2, (100 - ir)/100, (100 - iv)/100, m2]
-
-# ╔═╡ d80c9de0-9227-11eb-28be-bf26f5194979
-u02 = [1-I02-R02-V02-D02, I02, R02, V02, D02]
-
-# ╔═╡ e32e0902-9227-11eb-0885-1199f01da570
-tspan2 = (0.0, 2000)
-
-# ╔═╡ e9840412-9227-11eb-0cbb-91d4b823cb40
-prob2 = ODEProblem(sirvd!,u02,tspan2,p2)
-
-# ╔═╡ c3ed3914-9227-11eb-0454-913918c3e700
-begin
-	sol2 = solve(prob2, dt=1.0, dense = true)
-	infected = sol2[2,:]
-	dead = infected + sol2[5,:]
-	recovered = dead + sol2[3,:]
-	vaccinated = recovered + sol2[4,:]
-	susceptible = vaccinated + sol2[1,:]
-	
-	
-	simplot21 = plot(sol2.t, [susceptible, vaccinated, recovered, dead, infected], 
-				fill = true, 
-				color = ["gray89" "skyblue3" "paleturquoise3" "gray39" "lightcoral"], 
-				fillalpha = 1, 
-				label = ["S(t)" "V(t)" "R(t)" "D(t)" "I(t)"], 
-				xlabel = "t / days", 
-				title = "Timecourse (stacked area)", 
-				xlims = (0, tmax2), 
-				ylims = (0, ymax2))
-	
-	simplot22 = plot(sol2,
-				color = ["gray89" "lightcoral" "paleturquoise3" "skyblue3" "gray39"], 
-				fillalpha = 0.4, label = ["S(t)" "I(t)" "R(t)" "V(t)" "D(t)"], 
-				xlabel = "t / days", 
-				title = "Timecourse", 
-				xlims = (0, tmax2), 
-				ylims = (0, ymax2))
-	
-	plot(simplot21, simplot22, layout = (1, 2),fontfamily="Computer Modern")
-end
-
-# ╔═╡ fccfb44a-922d-11eb-05d8-9b378316a417
-md"""
-| t (days) | I(t)                               | R(t)                               | V(t)                               | D(t)                               |
-|----------|------------------------------------|------------------------------------|------------------------------------|------------------------------------|
-| 0        | $(getres(sol2, 2, 0, popsize))     | $(getres(sol2, 3, 0, popsize))     | $(getres(sol2, 4, 0, popsize))     | $(getres(sol2, 5, 0, popsize))     |
-| $tmax2   | $(getres(sol2, 2, tmax2, popsize)) | $(getres(sol2, 3, tmax2, popsize)) | $(getres(sol2, 4, tmax2, popsize)) | $(getres(sol2, 5, tmax2, popsize)) |
-
-Base reprodution rate = $(round((r2*(1-I02-R02-V02-D02)/a2), sigdigits = 3)), 
-Infectious period = $(round(1/a2, sigdigits = 3))
-
-"""
-
 # ╔═╡ Cell order:
 # ╟─7cd44a22-91f0-11eb-056d-699740ca7da9
-# ╠═3199bb4e-91ed-11eb-37fa-abed99588e6b
+# ╟─3199bb4e-91ed-11eb-37fa-abed99588e6b
 # ╟─1fc5f952-91ff-11eb-3366-9f477c640915
 # ╟─bfe81088-9203-11eb-162b-f373131bc105
 # ╟─e574a398-9203-11eb-0006-c38430911ee1
 # ╟─ac0c0230-91f0-11eb-057d-2103908afe51
 # ╟─0b66bc58-91fa-11eb-24f1-7f9f839a6cbf
-# ╠═4c7f9b82-91f1-11eb-0064-e70bb182dae0
+# ╟─4c7f9b82-91f1-11eb-0064-e70bb182dae0
 # ╟─a5f6c71c-920a-11eb-09e9-098f52c01f11
 # ╟─618d69dc-91f1-11eb-211f-d7548bf4a306
 # ╟─9a4c2f80-91f1-11eb-2b14-1784007ca92c
 # ╟─a6c393c8-91f1-11eb-0be0-99d47c2b207f
 # ╟─eccbab9e-91f1-11eb-19b2-d733609880d0
 # ╟─f2abe15a-91f1-11eb-17c2-e99b8b67502f
-# ╟─af81cf0a-9220-11eb-3ba9-e17dc6c8e46a
-# ╟─d0cc506c-9226-11eb-295c-39c46ae3c52d
-# ╟─fccfb44a-922d-11eb-05d8-9b378316a417
-# ╟─c3ed3914-9227-11eb-0454-913918c3e700
-# ╟─1b563284-9230-11eb-0e2a-378bf00144ef
-# ╟─c5daceee-9227-11eb-0bb4-19e3a2a5ca9e
-# ╟─d1542720-9227-11eb-18a9-357d60270d93
-# ╟─d80c9de0-9227-11eb-28be-bf26f5194979
-# ╟─e32e0902-9227-11eb-0885-1199f01da570
-# ╟─e9840412-9227-11eb-0cbb-91d4b823cb40
