@@ -117,7 +117,7 @@ begin
 	icu_cap = [1000 for t in sol2.t]
 	
 	
-	simplot21 = plot(sol2.t, [susceptible, vaccinated, recovered, dead, infected, icu], 
+	sim_stackarea = plot(sol2.t, [susceptible, vaccinated, recovered, dead, infected, icu], 
 				fill = true, 
 				color = ["gray89" "skyblue3" "paleturquoise3" "gray39" "lightcoral" "maroon"], 
 				fillalpha = 1, 
@@ -129,15 +129,24 @@ begin
 	
 	
 	
-	simplot22 = plot(sol2,
+	sim_timecourse = plot(sol2,
 				color = ["gray89" "lightcoral" "paleturquoise3" "skyblue3" "gray39"], 
-				fillalpha = 0.4, label = ["S(t)" "I(t)" "R(t)" "V(t)" "D(t)"], 
+				label = ["S(t)" "I(t)" "R(t)" "V(t)" "D(t)"], 
 				xlabel = "t / days", 
 				title = "Timecourse", 
 				xlims = (0, tmax2), 
 				ylims = (0, ymax2))
 	
-	plot(simplot21, simplot22, layout = (1, 2),fontfamily="Computer Modern")
+	sim_rate_tc = plot(0:tmax2, sol2(0:tmax2, Val{1}, idxs=2),
+				color = ["lightcoral"],
+				label = [L"\frac{dI}{dt}"],
+				xlabel = "t / days", 
+				title = "New Infections",
+				xlims = (0, tmax2))
+	
+	timecourses = plot(sim_timecourse, sim_rate_tc, layout = (2,1))
+	
+	plot(sim_stackarea, timecourses, layout = (1, 2),fontfamily="Computer Modern")
 end
 
 # ╔═╡ 7ec0712a-92af-11eb-2144-15d33af27c3d
@@ -152,14 +161,18 @@ Infectious period = $(round(1/a2, sigdigits = 3))
 
 """
 
+# ╔═╡ 230527fa-92b3-11eb-308f-ffab3777029c
+sol2(0:tmax2, Val{1}, idxs=2)
+
 # ╔═╡ Cell order:
-# ╟─430d5134-92af-11eb-1fcc-d71f5216d62a
+# ╠═430d5134-92af-11eb-1fcc-d71f5216d62a
 # ╟─5adc7e34-92af-11eb-2cfe-67899a4a0291
-# ╟─7a19b238-92af-11eb-30fd-b189d06a0882
+# ╠═7a19b238-92af-11eb-30fd-b189d06a0882
 # ╟─7ec0712a-92af-11eb-2144-15d33af27c3d
 # ╟─88b411f0-92af-11eb-2abf-151b2bfb313b
+# ╟─230527fa-92b3-11eb-308f-ffab3777029c
 # ╟─8f867f9a-92af-11eb-3671-43904aa74d8b
-# ╟─96d8a5c2-92af-11eb-1d3f-9bdd035eafec
+# ╠═96d8a5c2-92af-11eb-1d3f-9bdd035eafec
 # ╟─9c0dfe82-92af-11eb-3192-49c2deac6e9b
 # ╟─a1e4ca5e-92af-11eb-1c40-410a8d3abaca
 # ╟─ada6253e-92af-11eb-0e32-d9760ab88271
