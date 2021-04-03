@@ -170,7 +170,7 @@ sol2(0:tmax2, Val{1}, idxs=2)
 # ╟─7a19b238-92af-11eb-30fd-b189d06a0882
 # ╟─7ec0712a-92af-11eb-2144-15d33af27c3d
 # ╟─88b411f0-92af-11eb-2abf-151b2bfb313b
-# ╟─230527fa-92b3-11eb-308f-ffab3777029c
+# ╠═230527fa-92b3-11eb-308f-ffab3777029c
 # ╟─8f867f9a-92af-11eb-3671-43904aa74d8b
 # ╟─96d8a5c2-92af-11eb-1d3f-9bdd035eafec
 # ╟─9c0dfe82-92af-11eb-3192-49c2deac6e9b
