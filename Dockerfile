@@ -18,6 +18,9 @@ COPY --chown=${NB_USER}:users ./notebooks ./notebooks
 COPY --chown=${NB_USER}:users ./Project.toml ./Project.toml
 COPY --chown=${NB_USER}:users ./Manifest.toml ./Manifest.toml
 
+COPY --chown=${NB_USER}:users ./warmup.jl ./warmup.jl
+COPY --chown=${NB_USER}:users ./create_sysimage.jl ./create_sysimage.jl
+
 ENV USER_HOME_DIR /home/${NB_USER}
 ENV JULIA_PROJECT ${USER_HOME_DIR}
 ENV JULIA_DEPOT_PATH ${USER_HOME_DIR}/.julia

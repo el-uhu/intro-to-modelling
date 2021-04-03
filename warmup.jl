@@ -5,8 +5,9 @@ covid_data = DataFrame(CSV.File(download("https://covid.ourworldindata.org/data/
 locations = ["Austria"];
 
 D = covid_data[in.(covid_data.location, Ref(locations)), :];
+ydata = ["total_cases"]
 
-dataplot = @df D plot(cols(Symbol("date")), cols([Symbol(y) for y in ["total_cases"]]), 
+dataplot = @df D plot(cols(Symbol("date")), cols([Symbol(y) for y in ydata ]), 
 group = (:location),
 labels = reshape(["$l, $y" for y in ydata for l in locations], 1, :),
 fontfamily = "ComputerModern",
