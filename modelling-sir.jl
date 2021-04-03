@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.21
+# v0.14.0
 
 using Markdown
 using InteractiveUtils
@@ -99,12 +99,15 @@ md"""
 # ╔═╡ ac0c0230-91f0-11eb-057d-2103908afe51
 md""" ## Simulation
 *Change the sliders to adjust the corresponding values*:
-- transmission rate $r$ $(@bind r Slider(0:0.005:1, default=0.125, show_value=true))
-- recovery rate $a$ $(@bind a Slider(0:0.001:0.25, default=0.1, show_value=true))
-- initial number of infected $I(0)$ $(@bind I0 Slider(0.0001:0.001:0.1, default=0.01, show_value=true))
-- initial number of resistant $R(0)$ $(@bind R0 Slider(0:0.001:0.1, default=0,show_value=true))
-- timespan $t_{max}$ $(@bind tmax Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days
-- zoom y-axis $(@bind ymax Slider(0.05:0.05:1.0, default=1.0,show_value=true))
+
+| Parameter         | Value                  |
+|-------------------|------------------------|
+ transmission rate $r$ | $(@bind r Slider(0:0.005:1, default=0.125, show_value=true)) |
+| recovery rate $a$ | $(@bind a Slider(0:0.001:0.25, default=0.1, show_value=true)) |
+| initial number of infected $I(0)$ | $(@bind I0 Slider(0.0001:0.001:0.1, default=0.01, show_value=true)) |
+| initial number of resistant $R(0)$ | $(@bind R0 Slider(0:0.001:0.1, default=0,show_value=true)) |
+| timespan $t_{max}$ | $(@bind tmax Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days |
+| zoom y-axis | $(@bind ymax Slider(0.05:0.05:1.0, default=1.0,show_value=true)) |
 """
 
 # ╔═╡ 0b66bc58-91fa-11eb-24f1-7f9f839a6cbf
