@@ -18,7 +18,7 @@ end
 begin
 	using Pkg
 	Pkg.activate(".")
-	using Plots, PlutoUI, LaTeXStrings, DifferentialEquations, DataFrames, DataFramesMeta, CSV, StatsPlots, Dates
+	using Plots, PlutoUI, LaTeXStrings, DifferentialEquations, DataFrames, DataFramesMeta, CSV, StatsPlots, Dates, Flux, Optim, DiffEqFlux, DiffEqSensitivity
 end
 
 # ╔═╡ 39a8b108-92d0-11eb-2442-1f47a7e9b445
