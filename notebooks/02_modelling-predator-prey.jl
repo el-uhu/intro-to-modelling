@@ -17,7 +17,7 @@ end
 #Set up the working environment
 begin
 	using Pkg
-	Pkg.activate(".")
+	Pkg.activate("..")
 	using Plots, PlutoUI,LaTeXStrings, DifferentialEquations
 end
 
