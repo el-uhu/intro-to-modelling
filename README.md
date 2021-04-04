@@ -40,14 +40,21 @@ cd("path/to/intro-to-modelling")
 
 ```
 julia> readdir()
-7-element Array{String,1}:
+14-element Vector{String}:
  ".git"
+ ".github"
+ "Dockerfile"
+ "LICENSE"
  "Manifest.toml"
  "Project.toml"
  "README.md"
- "modelling-basics_growth.jl"
- "modelling-predator-prey.jl"
- "modelling-sir.jl"
+ "binder"
+ "environment.yml"
+ "notebooks"
+ "plutoserver"
+ "postBuild"
+ "runpluto.sh"
+ "setup.py"
 ```
 
 6. Press the key `]`, to activate julia's package manager. The prompt in the REPL should change to from `julia>` to `pkg>`.
@@ -55,6 +62,19 @@ julia> readdir()
 8. Type in `instantiate` to install the dependencies.
 
 ## Startup
-1. Type in `include(start-notebooks.jl)` to load the dependencies (may take a while the first time you do it) and then launch a browser that takes you to the welcome page.
-2. Select your desired notebook from the launcher.
+1. Enter the following commands into the REPL
+```julia
+using Pluto
 
+Pluto.run()
+```
+
+2. Select your desired notebook from the launcher, by specifiying the path to it: `notebooks/01_modelling-basics_growth.jl`or similar.
+```
+notebooks/
+├── 01_modelling-basics_growth.jl
+├── 02_modelling-basics_predator-prey.jl
+├── 03_modelling-basics_sir.jl
+├── 04_modelling-sirvd.jl
+└── 05_looking-at-real-data.jl
+```
