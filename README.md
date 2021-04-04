@@ -7,8 +7,12 @@ To explore the notebooks, you can either choose the simple, yet somewhat less pe
 
 To explore the notebooks right in your browser, without having to install any additional software, simply click on the links below:
 
-1. **Modelling Basics - Growth** - A brief introduction to the mathematics of differential equations, visual analysis via rateplots and simple growth models 
-### Background
+1. **Modelling Basics - Growth** - A brief introduction to the mathematics of differential equations, visual analysis via rateplots and simple growth models [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/01_modelling-basics_growth.jl)
+2. **Modelling Basics - Interacting Populations: Predator-Prey** - A look at models of interacting populations using the Lotka-Volterra model [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/02_modelling-basics_predator-prey.jl)
+3. **Modelling Basics . Epidemic Modelling: SIR Model** - An introduction to epidemic modelling using the classic SIR-Model by Kermack & McKendrick [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/03_modelling-basics_sir.jl)
+4. **SIRVD Model** - An attempt at a more realistic SIR model: including mortality, reinfections and vaccinations [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/04_modelling-sirvd.jl)
+5. **Covid Data Dashboard** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/05_looking-at-real-data.jl)
+### Background on Implementation
 [mybinder.org](https://mybinder.org/) is a deployment platform for interactive notebooks (mostly jupyter) and is run by the Binder Project. In making pluto.jl notebooks available via binder, I relied heavily on the work discussed in [this thread](https://discourse.julialang.org/t/hosting-interactive-pluto-notebook-on-web-github/47167). Whereas there are simpler methods to deploy pluto notebooks than the on I used here (such as [pluto-on-binder](http://pluto-on-binder.glitch.me/) by the designer of Pluto.jl), they generally work less well for computationally more complex notebooks.
 
 In essence, the implementation works as follows:
