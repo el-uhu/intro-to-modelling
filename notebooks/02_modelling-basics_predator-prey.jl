@@ -57,7 +57,7 @@ md"""
 
 # ╔═╡ 0c6eb46c-a03e-4950-abe6-368b85a4b55e
 md"""
-> **Exercise - Interspecies Relationships**: Unter certain parameters, the model gives results that appear strange at first sight- where predator populations vastly outnumber the prey population.
+> **Exercise - Interspecies Relationships**: Unter certain parameters, the model gives results that appear strange at first sight: Peaks in predator populations vastly outnumber those of the prey population.
 >
 >1. Using the concept of energy flow in ecosystems, suggest why a predator population that vastly outnumbers the prey population is generally not what we would expect to see in an ecosystem
 >2. Find a parameter set that gives you a predator population that is substantially larger than the prey population.
@@ -103,8 +103,8 @@ begin
 	# u[1] = N, u[2] = P
 
 	sol = solve(prob)
-	simplot = plot(sol, labels = ["N(t)" "P(t)"])
-	phaseplot = plot(sol, vars = (1,2), xlabel = "N(t)", ylabel = "P(t)")
+	simplot = plot(sol, labels = ["N(t)" "P(t)"], title = "Timecourse")
+	phaseplot = plot(sol, vars = (1,2), xlabel = "N(t)", ylabel = "P(t)", labels= "", title = "Phaseplane")
 	plot(simplot, phaseplot, layout = (1, 2),fontfamily="Computer Modern")
 end
 
@@ -164,7 +164,7 @@ end
 # ╟─0c6eb46c-a03e-4950-abe6-368b85a4b55e
 # ╟─f6a109fd-232e-42b6-a2c2-88c7eb9befce
 # ╟─f1a68086-9169-11eb-2721-652c6732d36f
-# ╠═6c09dc9c-916a-11eb-1bff-fb5495955ad7
+# ╟─6c09dc9c-916a-11eb-1bff-fb5495955ad7
 # ╟─0f573286-916e-11eb-157e-1d0139bd363c
 # ╟─2400191e-916e-11eb-2d01-3b3a48757ff4
 # ╟─2c79a5ea-916e-11eb-1abb-7933f2a1eae1

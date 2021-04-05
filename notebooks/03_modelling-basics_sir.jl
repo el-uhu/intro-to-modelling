@@ -60,7 +60,7 @@ $$R_0 = \frac{rS_0}{a}$$
 
 If we have a rough idea of the fractions of the population that is either infected ($I_0$) or resistant ($R_0$), we can easily determine the fraction of susceptible individuals ($S_0$).
 
-The parameters $r$ and $a$ are harder to determine. However, if we have an idea of the amount of time infected individuals remain infectious on average, we can estimate the recovery rate $r$ using the following relationship:
+The parameters $r$ and $a$ are harder to determine. However, if we have an idea of the amount of time infected individuals remain infectious on average, we can estimate the recovery rate $a$ using the following relationship:
 
 $$t_{infectious} = \frac{1}{a}$$
 
@@ -108,14 +108,7 @@ md""" ## Simulation
 | initial number of resistant $R(0)$ | $(@bind R0 Slider(0:0.001:0.1, default=0,show_value=true)) |
 | timespan $t_{max}$ | $(@bind tmax Slider(10.0:10.0:2000.0, default=100.0,show_value=true)) days |
 | zoom y-axis | $(@bind ymax Slider(0.05:0.05:1.0, default=1.0,show_value=true)) |
-"""
-
-# ╔═╡ 0b66bc58-91fa-11eb-24f1-7f9f839a6cbf
-md"""
-Base reprodution rate = $(round((r*(1-I0-R0)/a), sigdigits = 3)), 
-Infectious period = $(round(1/a, sigdigits = 3))
-
-Scaled for Austria (9M): I(0): $(I0 * 9000000), R(0): $(R0 * 9000000)
+| Population size             | $(@bind popsize NumberField(500000:10000000000, default=9044650)) |
 """
 
 # ╔═╡ a5f6c71c-920a-11eb-09e9-098f52c01f11
@@ -148,16 +141,54 @@ prob = ODEProblem(sir!,u0,tspan,p)
 begin
 	sol = solve(prob, dt=1.0, dense = true)
 	
-	simplot = plot(sol.t, [sol[3,:] + sol[2,:] + sol[1,:] sol[3,:] + sol[2,:] sol[2,:]], fill = true, color = ["gray89" "paleturquoise3" "lightcoral"], fillalpha = 0.4, label = ["S(t)" "R(t)" "I(t)"], xlabel = "t / days", title = "Timecourse", xlims = (0, tmax), ylims = (0, ymax))
+	simplot = plot(sol.t, [sol[3,:] + sol[2,:] + sol[1,:] sol[3,:] + sol[2,:] sol[2,:]],
+		fill = true, 
+		color = ["gray89" "paleturquoise3" "lightcoral"], 
+		label = ["S(t)" "R(t)" "I(t)"], 
+		xlabel = "t / days", 
+		title = "Timecourse", 
+		xlims = (0, tmax), 
+		ylims = (0, ymax))
 	
-	phaseplot1 = plot(sol, vars = (1,2), xlabel = "S(t)", ylabel = "I(t)", label = "", title = "Phaseplanes", xlims = (0,ymax), ylims = (0,ymax), color = "skyblue4")
+	phaseplot1 = plot(sol, vars = (1,2), 
+		xlabel = "S(t)", 
+		ylabel = "I(t)", 
+		label = "", 
+		title = "Phaseplanes", 
+		xlims = (0,ymax), 
+		ylims = (0,ymax), 
+		color = "skyblue4")
 	
-	phaseplot2 = plot(sol, vars = (3,2), xlabel = "R(t)", ylabel = "I(t)", label = "", xlims = (0,ymax), ylims = (0,ymax), color = "skyblue4")
+	phaseplot2 = plot(sol, vars = (3,2), 
+		xlabel = "R(t)", 
+		ylabel = "I(t)", 
+		label = "", 
+		xlims = (0,ymax), 
+		ylims = (0,ymax), 
+		color = "skyblue4")
 	
 	phaseplot = plot(phaseplot1, phaseplot2, layout = (2,1))
 	
-	plot(simplot, phaseplot, layout = (1, 2),fontfamily="Computer Modern")
+	#plot(simplot, phaseplot, layout = (1, 2),fontfamily="Computer Modern")
+	plot(simplot,fontfamily="Computer Modern")
 end
+
+# ╔═╡ 0a8e0895-2de8-435e-827c-fb216ab07f10
+function getres(solution, i, t, p)
+	v = solution(t)[i]*p
+	return round(maximum([0.0 v]))
+end
+
+# ╔═╡ 0b66bc58-91fa-11eb-24f1-7f9f839a6cbf
+md"""
+Base reprodution rate = $(round((r*(1-I0-R0)/a), sigdigits = 3)), 
+Infectious period = $(round(1/a, sigdigits = 3))
+
+| t(days)   | I(t)   | R(t)    |
+|-----------|--------|---------|
+| 0         | $(getres(sol, 2, 0, popsize)) | $(getres(sol, 3, 0, popsize)) |
+| $tmax     | $(getres(sol, 2, tmax, popsize)) | $(getres(sol, 3, tmax, popsize)) |
+"""
 
 # ╔═╡ Cell order:
 # ╟─7cd44a22-91f0-11eb-056d-699740ca7da9
@@ -174,3 +205,4 @@ end
 # ╟─a6c393c8-91f1-11eb-0be0-99d47c2b207f
 # ╟─eccbab9e-91f1-11eb-19b2-d733609880d0
 # ╟─f2abe15a-91f1-11eb-17c2-e99b8b67502f
+# ╟─0a8e0895-2de8-435e-827c-fb216ab07f10
