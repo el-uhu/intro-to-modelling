@@ -11,7 +11,7 @@ To explore the notebooks right in your browser, without having to install any ad
 2. **Modelling Basics - Interacting Populations: Predator-Prey** - A look at models of interacting populations using the Lotka-Volterra model [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/02_modelling-basics_predator-prey.jl)
 3. **Modelling Basics . Epidemic Modelling: SIR Model** - An introduction to epidemic modelling using the classic SIR-Model by Kermack & McKendrick [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/03_modelling-basics_sir.jl)
 4. **SIRVD Model** - An attempt at a more realistic SIR model: including mortality, reinfections and vaccinations [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/04_modelling-sirvd.jl)
-5. **Covid Data Dashboard** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/el-uhu/intro-to-modelling/HEAD?urlpath=pluto/open?path=/home/jovyan/notebooks/05_looking-at-real-data.jl)
+
 ### Background on Implementation
 [mybinder.org](https://mybinder.org/) is a deployment platform for interactive notebooks (mostly jupyter) and is run by the Binder Project. In making pluto.jl notebooks available via binder, I relied heavily on the work discussed in [this thread](https://discourse.julialang.org/t/hosting-interactive-pluto-notebook-on-web-github/47167). Whereas there are simpler methods to deploy pluto notebooks than the one I used here (such as [pluto-on-binder](http://pluto-on-binder.glitch.me/) by the designer of Pluto.jl), they generally work less well for computationally more complex notebooks.
 
@@ -57,10 +57,6 @@ julia> readdir()
  "setup.py"
 ```
 
-6. Press the key `]`, to activate julia's package manager. The prompt in the REPL should change to from `julia>` to `pkg>`.
-7. Type in `activate .` (don't forget the `.`) and press `Enter` to load the dependencies. The prompt should change from `pkg>` to `(intro-to-modelling) pkg>`.
-8. Type in `instantiate` to install the dependencies.
-
 ## Startup
 1. Enter the following commands into the REPL
 ```julia
@@ -76,5 +72,4 @@ notebooks/
 ├── 02_modelling-basics_predator-prey.jl
 ├── 03_modelling-basics_sir.jl
 ├── 04_modelling-sirvd.jl
-└── 05_looking-at-real-data.jl
 ```
